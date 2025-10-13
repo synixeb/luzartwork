@@ -18,7 +18,6 @@
   .header-actions { display: flex; gap: 1rem; }
 }
 
-// Navigation par onglets
 .tabs-nav {
   @include card-style;
   display: flex;
@@ -44,7 +43,6 @@
 
 .tab-content { animation: fadeIn 0.3s; }
 .tab-header { margin-bottom: 1.5rem; display: flex; justify-content: flex-end; }
-
 .btn-primary { @include btn-primary; }
 
 .btn-secondary, .btn-cancel {
@@ -55,15 +53,11 @@
   border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s;
-
   &:hover { background: #5a6268; }
 }
 
 .loading {
   text-align: center;
-  padding: 4rem;
-
   .spinner { @include spinner; width: 50px; height: 50px; margin: 0 auto 1rem; }
 }
 
@@ -76,7 +70,6 @@
   grid-template-columns: 150px 1fr auto;
   gap: 1.5rem;
   align-items: center;
-
   @media (max-width: 768px) { grid-template-columns: 1fr; }
 }
 
@@ -85,58 +78,42 @@
   height: 150px;
   border-radius: 8px;
   overflow: hidden;
-
   img { width: 100%; height: 100%; object-fit: cover; }
 }
 
 .artwork-info {
   h3 { margin: 0 0 0.5rem; color: #333; }
-
   .artwork-meta {
     display: flex;
     gap: 1rem;
     margin: 0 0 0.5rem;
     color: #666;
     font-size: 0.9rem;
-
     .badge { background: #10b981; color: white; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.85rem; }
   }
-
   .artwork-description { margin: 0; color: #666; font-size: 0.95rem; }
 }
 
 .artwork-actions { display: flex; gap: 0.5rem; flex-direction: column; }
 
-.btn-edit {
+.btn-edit, .btn-delete {
   padding: 0.5rem 1rem;
-  background: #4caf50;
   color: white;
   border: none;
   border-radius: 6px;
   cursor: pointer;
   transition: background 0.2s;
-
-  &:hover { background: #45a049; }
 }
 
-.btn-delete {
-  padding: 0.5rem 1rem;
-  background: #f44336;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.2s;
-
-  &:hover { background: #da190b; }
-}
+.btn-edit { background: #4caf50; &:hover { background: #45a049; }}
+.btn-delete { background: #f44336; &:hover { background: #da190b; }}
 
 .no-artworks { @include card-style; text-align: center; padding: 4rem; color: #666; }
 
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0,0,0,0.7);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -153,14 +130,12 @@
   max-height: 90vh;
   overflow-y: auto;
   animation: slideUp 0.3s;
-
   h2 { margin: 0 0 1.5rem; color: #333; }
 }
 
 .form-section {
   @include card-style;
   padding: 2rem;
-
   h2, h3 { color: #333; margin-top: 0; }
   h3 { margin-top: 2rem; margin-bottom: 1rem; font-size: 1.2rem; }
 }
@@ -168,9 +143,7 @@
 .artist-form, .contact-form, .artwork-form {
   .form-group {
     margin-bottom: 1.5rem;
-
     label { display: block; color: #333; font-weight: 600; margin-bottom: 0.5rem; }
-
     input, textarea, select {
       width: 100%;
       padding: 0.75rem;
@@ -178,18 +151,15 @@
       border-radius: 6px;
       font: inherit;
       transition: border-color 0.3s;
-
       &:focus { outline: none; border-color: #10b981; }
     }
-
     textarea { resize: vertical; }
   }
 
   .current-image-preview {
     margin-top: 1rem;
     text-align: center;
-
-    img { max-width: 200px; max-height: 250px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); }
+    img { max-width: 200px; max-height: 250px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
     p { margin-top: 0.5rem; color: #666; font-size: 0.9rem; }
   }
 
@@ -197,7 +167,6 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
-
     @media (max-width: 600px) { grid-template-columns: 1fr; }
   }
 
@@ -215,9 +184,7 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-
     &:disabled { opacity: 0.6; cursor: not-allowed; }
-
     .spinner-small { @include spinner; width: 16px; height: 16px; border-width: 2px; }
   }
 }
@@ -228,41 +195,26 @@
     grid-template-columns: 120px 1fr auto;
     gap: 0.75rem;
     margin-bottom: 0.75rem;
-
     @media (max-width: 600px) { grid-template-columns: 1fr; }
-
-    .btn-remove {
-      padding: 0.5rem 0.75rem;
-      background: #f44336;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background 0.2s;
-
-      &:hover { background: #da190b; }
-    }
   }
 
-  .btn-add {
-    padding: 0.75rem 1.5rem;
-    background: #10b981;
+  .btn-remove, .btn-add {
+    padding: 0.5rem 0.75rem;
     color: white;
     border: none;
     border-radius: 6px;
     cursor: pointer;
     transition: background 0.2s;
-    margin-top: 0.5rem;
-
-    &:hover { background: #059669; }
   }
+
+  .btn-remove { background: #f44336; &:hover { background: #da190b; }}
+  .btn-add { background: #10b981; margin-top: 0.5rem; padding: 0.75rem 1.5rem; &:hover { background: #059669; }}
 }
 
 .account-section {
   @include card-style;
   padding: 2rem;
   margin-bottom: 2rem;
-
   h3 { color: #10b981; margin-bottom: 1.5rem; }
   .account-form { max-width: 500px; }
 }
@@ -271,7 +223,6 @@
   padding: 1rem 1.5rem;
   border-radius: 8px;
   margin-bottom: 2rem;
-
   &.alert-error { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
   &.alert-success { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
 }
@@ -283,13 +234,10 @@
   border-radius: 6px;
   border: 1px solid #e5e7eb;
 
-  p { margin: 0 0 0.5rem; font-size: 0.9rem; color: #666; }
-
   ul {
     list-style: none;
     padding: 0;
     margin: 0;
-
     li {
       display: flex;
       align-items: center;
@@ -297,7 +245,6 @@
       padding: 0.25rem 0;
       font-size: 0.85rem;
       color: #666;
-
       &.valid { color: #10b981; }
     }
   }

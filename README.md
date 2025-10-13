@@ -7,8 +7,6 @@
 [![Node.js](https://img.shields.io/badge/Node.js-18+-green)](https://nodejs.org)
 [![MongoDB Atlas](https://img.shields.io/badge/MongoDB-Atlas-green)](https://www.mongodb.com/cloud/atlas)
 
-![Screenshot Placeholder](https://via.placeholder.com/800x400/10b981/ffffff?text=Portfolio+d%27Art)
-
 ## 🎨 Fonctionnalités
 
 - ✨ **Portfolio en une seule page** avec navigation fluide (Hero, À Propos, Galerie, Contact)
