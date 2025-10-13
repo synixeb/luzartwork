@@ -1,5 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
 
+// Import mixins partagés
+@import 'app/styles/mixins';
+
 // Reset et styles globaux
 * {
   margin: 0;
