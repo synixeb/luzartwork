@@ -1,0 +1,140 @@
+<section id="contact" class="contact-section">
+  <div class="container">
+    <h2 class="section-title">Contact</h2>
+
+    <div class="contact-content">
+      <div class="contact-info-box">
+        <h3>Restons en Contact</h3>
+        <p class="intro">N'hésitez pas à me contacter pour toute question, commission ou projet artistique.</p>
+        
+        <div class="info-items">
+            @if (contactInfo().email) {
+              <div class="info-item">
+                <span class="icon">📧</span>
+                <div>
+                  <strong>Email</strong>
+                  <p>{{ contactInfo().email }}</p>
+                </div>
+              </div>
+            }
+
+            @if (contactInfo().phone) {
+                <div class="info-item">
+                    <span class="icon">📱</span>
+                    <div>
+                    <strong>Téléphone</strong>
+                    <p>{{ contactInfo().phone }}</p>
+                    </div>
+                </div>
+            }
+
+            @if (contactInfo().address) {
+                <div class="info-item">
+                    <span class="icon">📍</span>
+                    <div>
+                    <strong>Localisation</strong>
+                    <p>{{ contactInfo().address }}</p>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="social-links">
+          <h4>Réseaux Sociaux</h4>
+          <div class="social-icons">
+            @if (contactInfo().social?.instagram) {
+              <a href="https://instagram.com/{{ contactInfo().social?.instagram }}" class="social-link instagram" target="_blank">
+                <span>Instagram</span>
+                <small>@{{ contactInfo().social?.instagram }}</small>
+              </a>
+            }
+            @if (contactInfo().social?.linkedin) {
+              <a href="https://linkedin.com/in/{{ contactInfo().social?.linkedin }}" class="social-link linkedin" target="_blank">
+                <span>LinkedIn</span>
+                <small>@{{ contactInfo().social?.linkedin }}</small>
+              </a>
+            }
+            @if (contactInfo().social?.artstation) {
+              <a href="https://www.artstation.com/{{ contactInfo().social?.artstation }}" class="social-link artstation" target="_blank">
+                <span>ArtStation</span>
+                <small>@{{ contactInfo().social?.artstation }}</small>
+              </a>
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-form-box">
+        @if (submitted()) {
+          <div class="success-message">
+            <span class="icon">✓</span>
+            <h3>Message envoyé avec succès !</h3>
+            <p>Je vous répondrai dans les plus brefs délais.</p>
+          </div>
+        } @else {
+          <form class="contact-form" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+              <label for="name">Nom complet</label>
+              <input 
+                type="text" 
+                id="name" 
+                [(ngModel)]="contactForm().name"
+                name="name"
+                placeholder="Votre nom"
+                required
+                [disabled]="loading()"
+              >
+            </div>
+            
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input 
+                type="email" 
+                id="email" 
+                [(ngModel)]="contactForm().email"
+                name="email"
+                placeholder="votre@email.com"
+                required
+                [disabled]="loading()"
+              >
+            </div>
+            
+            <div class="form-group">
+              <label for="subject">Sujet</label>
+              <input 
+                type="text" 
+                id="subject" 
+                [(ngModel)]="contactForm().subject"
+                name="subject"
+                placeholder="Objet de votre message"
+                required
+                [disabled]="loading()"
+              >
+            </div>
+            
+            <div class="form-group">
+              <label for="message">Message</label>
+              <textarea 
+                id="message" 
+                [(ngModel)]="contactForm().message"
+                name="message"
+                rows="6"
+                placeholder="Votre message..."
+                required
+                [disabled]="loading()"
+              ></textarea>
+            </div>
+            
+            <button type="submit" class="btn-submit" [disabled]="loading()">
+              @if (loading()) {
+                <span class="spinner-small"></span>
+                <span>Envoi en cours...</span>
+              } @else {
+                <span>Envoyer le message</span>
+              }
+            </button>
+          </form>
+        }
+      </div>
+    </div>
+  </div>
+</section>

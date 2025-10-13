@@ -1,0 +1,14 @@
+node_modules/
+.env
+uploads/*.jpg
+uploads/*.png
+uploads/*.jpeg
+uploads/*.gif
+uploads/*.webp
+!uploads/.gitkeep
+!uploads/profilPicture.jpg
+!uploads/profilPicture.png
+!uploads/profilPicture.jpeg
+!uploads/profilPicture.gif
+!uploads/profilPicture.webp
+*.log

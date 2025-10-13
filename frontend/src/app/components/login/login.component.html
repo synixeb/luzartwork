@@ -1,0 +1,57 @@
+<div class="login-container">
+  <div class="login-card">
+    <h1>Connexion Admin</h1>
+    <p class="subtitle">Accédez à votre tableau de bord</p>
+
+    <form (ngSubmit)="onSubmit()" class="login-form">
+      @if (error()) {
+        <div class="error-alert">
+          {{ error() }}
+        </div>
+      }
+
+      <div class="form-group">
+        <label for="username">Nom d'utilisateur</label>
+        <input
+          type="text"
+          id="username"
+          [(ngModel)]="username"
+          name="username"
+          placeholder="Entrez votre nom d'utilisateur"
+          required
+          [disabled]="loading()"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="password">Mot de passe</label>
+        <input
+          type="password"
+          id="password"
+          [(ngModel)]="password"
+          name="password"
+          placeholder="Entrez votre mot de passe"
+          required
+          [disabled]="loading()"
+        >
+      </div>
+
+      <button 
+        type="submit" 
+        class="btn-login"
+        [disabled]="loading()"
+      >
+        @if (loading()) {
+          <span class="spinner-small"></span>
+          Connexion...
+        } @else {
+          Se connecter
+        }
+      </button>
+    </form>
+
+    <div class="back-home">
+      <a routerLink="/">← Retour à la galerie</a>
+    </div>
+  </div>
+</div>

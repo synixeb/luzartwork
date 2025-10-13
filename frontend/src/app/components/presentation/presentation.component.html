@@ -1,0 +1,28 @@
+<section id="presentation" class="presentation-section">
+  <div class="container">
+    <h2 class="section-title">À Propos</h2>
+    
+    <div class="presentation-content">
+      <div class="artist-image">
+        <img [src]="artistImage()" [alt]="artistName()">
+      </div>
+      
+      <div class="artist-info">
+        <h3>{{ artistName() }}</h3>
+        <p class="bio">{{ bio() }}</p>
+        
+        <div class="parcours">
+          <h4>Parcours</h4>
+          <div class="timeline">
+            @for (item of parcours(); track item.year) {
+              <div class="timeline-item">
+                <span class="year">{{ item.year }}</span>
+                <span class="event">{{ item.event }}</span>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

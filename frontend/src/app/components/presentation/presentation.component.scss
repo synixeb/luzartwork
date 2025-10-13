@@ -1,0 +1,121 @@
+.presentation-section {
+  padding: 6rem 2rem;
+  background: white;
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-title {
+    font-size: 3rem;
+    text-align: center;
+    margin-bottom: 3rem;
+    color: #333;
+    position: relative;
+
+    &::after {
+      content: '';
+      display: block;
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+      margin: 1rem auto 0;
+      border-radius: 2px;
+    }
+  }
+
+  .presentation-content {
+    display: grid;
+    grid-template-columns: 400px 1fr;
+    gap: 4rem;
+    align-items: start;
+
+    @media (max-width: 968px) {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+
+  .artist-image {
+    img {
+      width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+      transition: transform 0.3s ease;
+
+      &:hover {
+        transform: scale(1.02);
+      }
+    }
+  }
+
+  .artist-info {
+    h3 {
+      font-size: 2rem;
+      color: #10b981;
+      margin-bottom: 1.5rem;
+    }
+
+    .bio {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: #555;
+      margin-bottom: 2rem;
+      text-align: justify;
+    }
+
+    .parcours {
+      h4 {
+        font-size: 1.5rem;
+        color: #333;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        &::before {
+          content: '';
+          width: 4px;
+          height: 24px;
+          background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+          border-radius: 2px;
+        }
+      }
+
+      .timeline {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .timeline-item {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        padding: 1rem;
+        background: #f8f9fa;
+        border-radius: 8px;
+        border-left: 4px solid #10b981;
+        transition: all 0.3s ease;
+
+        &:hover {
+          background: #e8f5e9;
+          transform: translateX(5px);
+        }
+
+        .year {
+          font-weight: 700;
+          color: #10b981;
+          font-size: 1.1rem;
+          min-width: 60px;
+        }
+
+        .event {
+          color: #555;
+          font-size: 1rem;
+        }
+      }
+    }
+  }
+}

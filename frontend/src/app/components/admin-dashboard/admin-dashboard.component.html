@@ -1,0 +1,531 @@
+<div class="admin-container">
+  <header class="admin-header">
+    <h1>Tableau de bord Admin</h1>
+    <div class="header-actions">
+      <button (click)="logout()" class="btn-secondary">
+        Déconnexion
+      </button>
+    </div>
+  </header>
+
+  <!-- Navigation par onglets -->
+  <nav class="tabs-nav">
+    <button 
+      class="tab-btn" 
+      [class.active]="activeTab() === 'artworks'"
+      (click)="setActiveTab('artworks')">
+      🎨 Œuvres
+    </button>
+    <button 
+      class="tab-btn" 
+      [class.active]="activeTab() === 'artist'"
+      (click)="setActiveTab('artist')">
+      👤 Infos Artiste
+    </button>
+    <button 
+      class="tab-btn" 
+      [class.active]="activeTab() === 'contact'"
+      (click)="setActiveTab('contact')">
+      📧 Contact
+    </button>
+    <button 
+      class="tab-btn" 
+      [class.active]="activeTab() === 'account'"
+      (click)="setActiveTab('account')">
+      🔒 Compte
+    </button>
+  </nav>
+
+  <!-- ONGLET ŒUVRES -->
+  @if (activeTab() === 'artworks') {
+    <div class="tab-content">
+      <div class="tab-header">
+        <button (click)="openForm()" class="btn-primary">
+          + Ajouter une œuvre
+        </button>
+      </div>
+
+      @if (loading() && !showForm()) {
+        <div class="loading">
+          <div class="spinner"></div>
+          <p>Chargement...</p>
+        </div>
+      }
+
+      <div class="artworks-list">
+        @for (artwork of artworks(); track artwork._id) {
+          <div class="artwork-item">
+            <div class="artwork-image-small">
+              <img [src]="getImageUrl(artwork.imageUrl)" [alt]="artwork.title">
+            </div>
+            <div class="artwork-info">
+              <h3>{{ artwork.title }}</h3>
+              <p class="artwork-meta">
+                @if (artwork.category) {
+                  <span class="badge">{{ artwork.category }}</span>
+                }
+                @if (artwork.year) {
+                  <span>{{ artwork.year }}</span>
+                }
+              </p>
+              @if (artwork.description) {
+                <p class="artwork-description">{{ artwork.description }}</p>
+              }
+              @if (artwork.isAvailable) {
+                <span class="status available">Visible</span>
+              } @else {
+                <span class="status not-available">Masquée</span>
+              }
+            </div>
+            <div class="artwork-actions">
+              <button (click)="openForm(artwork)" class="btn-edit">
+                Modifier
+              </button>
+              <button (click)="deleteArtwork(artwork._id!)" class="btn-delete">
+                Supprimer
+              </button>
+            </div>
+          </div>
+        } @empty {
+          <div class="no-artworks">
+            <p>Aucune œuvre. Commencez par en ajouter une !</p>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- ONGLET INFOS ARTISTE -->
+  @if (activeTab() === 'artist') {
+    <div class="tab-content">
+      <div class="form-section">
+        <h2>Informations de l'artiste</h2>
+        <form class="artist-form">
+          <div class="form-group">
+            <label for="artistName">Nom de l'artiste *</label>
+            <input
+              type="text"
+              id="artistName"
+              [(ngModel)]="artistInfo().name"
+              name="artistName"
+              required
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="artistBio">Biographie *</label>
+            <textarea
+              id="artistBio"
+              [(ngModel)]="artistInfo().bio"
+              name="artistBio"
+              rows="6"
+              required
+            ></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="artistImage">Photo de l'artiste</label>
+            <input
+              type="file"
+              id="artistImage"
+              (change)="onArtistImageSelected($event)"
+              accept="image/*"
+            >
+            @if (artistInfo().imageUrl && !artistImageFile()) {
+              <div class="current-image-preview">
+                <img [src]="getImageUrl(artistInfo().imageUrl)" alt="Photo actuelle">
+                <p>Photo actuelle</p>
+              </div>
+            }
+          </div>
+
+          <div class="form-group">
+            <label>Parcours</label>
+            <div class="parcours-list">
+              @for (item of artistInfo().parcours; track $index) {
+                <div class="parcours-item">
+                  <input
+                    type="text"
+                    placeholder="Année"
+                    [value]="item.year"
+                    (input)="updateParcoursItem($index, 'year', $any($event.target).value)"
+                    class="year-input"
+                  >
+                  <input
+                    type="text"
+                    placeholder="Événement"
+                    [value]="item.event"
+                    (input)="updateParcoursItem($index, 'event', $any($event.target).value)"
+                    class="event-input"
+                  >
+                  <button type="button" (click)="removeParcoursItem($index)" class="btn-remove">
+                    ✕
+                  </button>
+                </div>
+              }
+              <button type="button" (click)="addParcoursItem()" class="btn-add">
+                + Ajouter un événement
+              </button>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" (click)="saveArtistInfo()" class="btn-submit" [disabled]="loading()">
+              @if (loading()) {
+                <span class="spinner-small"></span>
+                Enregistrement...
+              } @else {
+                Enregistrer
+              }
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  }
+
+  <!-- ONGLET CONTACT -->
+  @if (activeTab() === 'contact') {
+    <div class="tab-content">
+      <div class="form-section">
+        <h2>Informations de contact</h2>
+        <form class="contact-form">
+          <div class="form-group">
+            <label for="contactEmail">Email *</label>
+            <input
+              type="email"
+              id="contactEmail"
+              [(ngModel)]="contactInfo().email"
+              name="contactEmail"
+              required
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="contactPhone">Téléphone</label>
+            <input
+              type="tel"
+              id="contactPhone"
+              [(ngModel)]="contactInfo().phone"
+              name="contactPhone"
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="contactAddress">Adresse</label>
+            <input
+              type="text"
+              id="contactAddress"
+              [(ngModel)]="contactInfo().address"
+              name="contactAddress"
+            >
+          </div>
+
+          <h3>Réseaux sociaux</h3>
+
+          <div class="form-group">
+            <label for="instagram">Instagram</label>
+            <input
+              type="text"
+              id="instagram"
+              [(ngModel)]="contactInfo().social!.instagram"
+              name="instagram"
+              placeholder="@username"
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="linkedin">LinkedIn</label>
+            <input
+              type="text"
+              id="linkedin"
+              [(ngModel)]="contactInfo().social!.linkedin"
+              name="linkedin"
+              placeholder="username"
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="artstation">ArtStation</label>
+            <input
+              type="text"
+              id="artstation"
+              [(ngModel)]="contactInfo().social!.artstation"
+              name="artstation"
+              placeholder="username"
+            >
+          </div>
+
+          <div class="form-actions">
+            <button type="button" (click)="saveContactInfo()" class="btn-submit" [disabled]="loading()">
+              @if (loading()) {
+                <span class="spinner-small"></span>
+                Enregistrement...
+              } @else {
+                Enregistrer
+              }
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  }
+
+  <!-- ONGLET COMPTE -->
+  @if (activeTab() === 'account') {
+    <div class="tab-content">
+      <div class="form-section">
+        <h2>Gestion du compte</h2>
+
+        @if (accountError()) {
+          <div class="alert alert-error">
+            {{ accountError() }}
+          </div>
+        }
+
+        @if (accountSuccess()) {
+          <div class="alert alert-success">
+            {{ accountSuccess() }}
+          </div>
+        }
+
+        <!-- Changement d'identifiant -->
+        <div class="account-section">
+          <h3>Modifier l'identifiant</h3>
+          <form class="account-form">
+            <div class="form-group">
+              <label for="currentPasswordUsername">Mot de passe actuel *</label>
+              <input
+                type="password"
+                id="currentPasswordUsername"
+                [(ngModel)]="accountForm().currentPassword"
+                name="currentPasswordUsername"
+                placeholder="Votre mot de passe actuel"
+                required
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="newUsername">Nouvel identifiant *</label>
+              <input
+                type="text"
+                id="newUsername"
+                [(ngModel)]="accountForm().newUsername"
+                name="newUsername"
+                placeholder="Nouvel identifiant"
+                required
+              >
+            </div>
+
+            <div class="form-actions">
+              <button type="button" (click)="updateUsername()" class="btn-submit" [disabled]="loading()">
+                @if (loading()) {
+                  <span class="spinner-small"></span>
+                  Mise à jour...
+                } @else {
+                  Mettre à jour l'identifiant
+                }
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <hr class="section-divider">
+
+        <!-- Changement de mot de passe -->
+        <div class="account-section">
+          <h3>Modifier le mot de passe</h3>
+          <form class="account-form">
+            <div class="form-group">
+              <label for="currentPasswordPassword">Mot de passe actuel *</label>
+              <input
+                type="password"
+                id="currentPasswordPassword"
+                [(ngModel)]="accountForm().currentPassword"
+                name="currentPasswordPassword"
+                placeholder="Votre mot de passe actuel"
+                required
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="newPassword">Nouveau mot de passe *</label>
+              <input
+                type="password"
+                id="newPassword"
+                [(ngModel)]="accountForm().newPassword"
+                name="newPassword"
+                placeholder="Nouveau mot de passe"
+                required
+                minlength="7"
+              >
+              <div class="password-requirements">
+                <p>Votre mot de passe doit contenir :</p>
+                <ul>
+                  <li [class.valid]="hasMinLength()">
+                    <span class="check-icon">{{ hasMinLength() ? '✓' : '○' }}</span>
+                    Au moins 7 caractères
+                  </li>
+                  <li [class.valid]="hasUppercase()">
+                    <span class="check-icon">{{ hasUppercase() ? '✓' : '○' }}</span>
+                    Au moins une majuscule
+                  </li>
+                  <li [class.valid]="hasLowercase()">
+                    <span class="check-icon">{{ hasLowercase() ? '✓' : '○' }}</span>
+                    Au moins une minuscule
+                  </li>
+                  <li [class.valid]="hasNumber()">
+                    <span class="check-icon">{{ hasNumber() ? '✓' : '○' }}</span>
+                    Au moins un chiffre
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="confirmPassword">Confirmer le mot de passe *</label>
+              <input
+                type="password"
+                id="confirmPassword"
+                [(ngModel)]="accountForm().confirmPassword"
+                name="confirmPassword"
+                placeholder="Retapez le nouveau mot de passe"
+                required
+              >
+            </div>
+
+            <div class="form-actions">
+              <button type="button" (click)="updatePassword()" class="btn-submit" [disabled]="loading()">
+                @if (loading()) {
+                  <span class="spinner-small"></span>
+                  Mise à jour...
+                } @else {
+                  Mettre à jour le mot de passe
+                }
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Modal de formulaire œuvre -->
+  @if (showForm()) {
+    <div class="modal-overlay" (click)="closeForm()">
+      <div class="modal-form" (click)="$event.stopPropagation()">
+        <h2>{{ editMode() ? 'Modifier l\'œuvre' : 'Nouvelle œuvre' }}</h2>
+        
+        <form (ngSubmit)="onSubmit()" class="artwork-form">
+          <div class="form-group">
+            <label for="title">Titre *</label>
+            <input
+              type="text"
+              id="title"
+              [(ngModel)]="currentArtwork().title"
+              name="title"
+              required
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="description">Description</label>
+            <textarea
+              id="description"
+              [(ngModel)]="currentArtwork().description"
+              name="description"
+              rows="4"
+            ></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="category">Catégorie</label>
+              <select
+                id="category"
+                [(ngModel)]="currentArtwork().category"
+                name="category"
+              >
+                @for (cat of categories; track cat) {
+                  <option [value]="cat">{{ cat }}</option>
+                }
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="year">Année</label>
+              <input
+                type="number"
+                id="year"
+                [(ngModel)]="currentArtwork().year"
+                name="year"
+              >
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="image">Image</label>
+            <input
+              type="file"
+              id="image"
+              (change)="onFileSelected($event)"
+              accept="image/*"
+            >
+            @if (currentArtwork().imageUrl && !selectedFile()) {
+              <p class="current-image">Image actuelle : {{ currentArtwork().imageUrl }}</p>
+            }
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="dimensions">Dimensions</label>
+              <input
+                type="text"
+                id="dimensions"
+                [(ngModel)]="currentArtwork().dimensions"
+                name="dimensions"
+                placeholder="ex: 100x80 cm"
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="technique">Technique</label>
+              <input
+                type="text"
+                id="technique"
+                [(ngModel)]="currentArtwork().technique"
+                name="technique"
+                placeholder="ex: Huile sur toile"
+              >
+            </div>
+
+            <div>
+              <label for="isAvailable" class="checkbox-label">Visible dans la galerie: </label>
+                <input
+                  type="checkbox"
+                  id="isAvailable"
+                  [checked]="currentArtwork().isAvailable"
+                  (change)="currentArtwork().isAvailable = $event.target.checked"
+                  name="isAvailable"
+                >
+          </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" (click)="closeForm()" class="btn-cancel">
+              Annuler
+            </button>
+            <button type="submit" class="btn-submit" [disabled]="loading()">
+              @if (loading()) {
+                <span class="spinner-small"></span>
+                Enregistrement...
+              } @else {
+                {{ editMode() ? 'Mettre à jour' : 'Créer' }}
+              }
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  }
+</div>

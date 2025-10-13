@@ -1,0 +1,19 @@
+{
+  "name": "luzartwork",
+  "version": "1.0.0",
+  "description": "Site portfolio pour artiste avec système d'administration",
+  "scripts": {
+    "install:all": "npm install && cd frontend && npm install && cd ../backend && npm install",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && ng serve",
+    "build:frontend": "cd frontend && ng build --configuration=production",
+    "start:backend": "cd backend && npm start"
+  },
+  "keywords": ["portfolio", "art", "angular", "node"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

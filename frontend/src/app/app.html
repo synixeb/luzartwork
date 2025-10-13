@@ -1,0 +1,32 @@
+<!-- Header fixe qui suit le scroll -->
+<header class="navbar" [class.scrolled]="isScrolled()">
+  <div class="navbar-container">
+    <div class="logo">
+      <h2 (click)="scrollToSection('accueil')" style="cursor: pointer;">LuzArtwork</h2>
+    </div>
+    <nav class="nav-links">
+      <a (click)="scrollToSection('accueil')" class="nav-link">Accueil</a>
+      <a (click)="scrollToSection('presentation')" class="nav-link">Présentation</a>
+      <a (click)="scrollToSection('galerie')" class="nav-link">Galerie</a>
+      <a (click)="scrollToSection('contact')" class="nav-link">Contact</a>
+      <a [routerLink]="['/login']" class="nav-link login-link">Admin</a>
+    </nav>
+    <button class="mobile-menu-button" (click)="toggleMobileMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+</header>
+
+<!-- Menu mobile -->
+<div class="mobile-menu" [class.open]="mobileMenuOpen()">
+  <a (click)="scrollToSection('accueil')" class="mobile-link">Accueil</a>
+  <a (click)="scrollToSection('presentation')" class="mobile-link">Présentation</a>
+  <a (click)="scrollToSection('galerie')" class="mobile-link">Galerie</a>
+  <a (click)="scrollToSection('contact')" class="mobile-link">Contact</a>
+  <a [routerLink]="['/login']" (click)="closeMobileMenu()" class="mobile-link admin-link">Admin</a>
+</div>
+
+<!-- Contenu principal -->
+<router-outlet />

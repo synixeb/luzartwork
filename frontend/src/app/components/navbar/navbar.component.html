@@ -1,0 +1,24 @@
+<nav class="navbar" [class.scrolled]="isScrolled()">
+  <div class="navbar-brand">
+    <a (click)="scrollToSection('accueil')" style="cursor: pointer;">Luzartwork</a>
+  </div>
+  
+  <button class="mobile-menu-btn" (click)="toggleMobileMenu()">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <div class="navbar-menu" [class.open]="mobileMenuOpen()">
+    <a (click)="scrollToSection('accueil')" class="nav-link">Accueil</a>
+    <a (click)="scrollToSection('presentation')" class="nav-link">À Propos</a>
+    <a (click)="scrollToSection('galerie')" class="nav-link">Galerie</a>
+    <a (click)="scrollToSection('contact')" class="nav-link">Contact</a>
+    
+    @if (authService.isAuthenticated()) {
+      <a routerLink="/admin" class="nav-link admin-link">Admin</a>
+    } @else {
+      <a routerLink="/login" class="nav-link login-link">Connexion</a>
+    }
+  </div>
+</nav>
