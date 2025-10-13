@@ -1,5 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
 
+// Import mixins partagés
+@import 'app/styles/mixins';
+
 // Reset et styles globaux
 * {
   margin: 0;
@@ -41,4 +44,31 @@ body {
   &:hover {
     background: linear-gradient(135deg, #059669 0%, #2563eb 100%);
   }
+}
+
+// Classes utilitaires globales
+.btn-action {
+  padding: 0.5rem 1rem;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  font: inherit;
+  transition: border-color 0.3s;
+  &:focus { outline: none; border-color: #10b981; }
+}
+
+.card-section {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  padding: 2rem;
 }

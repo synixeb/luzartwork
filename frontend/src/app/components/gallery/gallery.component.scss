@@ -1,3 +1,5 @@
+@import '../../styles/mixins';
+
 .page-container {
   width: 100%;
 }
@@ -8,17 +10,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+  @include gradient-bg;
   position: relative;
   overflow: hidden;
 
   &::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    inset: 0;
     background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff" fill-opacity="0.1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,138.7C960,139,1056,117,1152,96C1248,75,1344,53,1392,42.7L1440,32L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') no-repeat bottom;
     background-size: cover;
   }
@@ -34,7 +33,7 @@
       font-weight: 800;
       margin-bottom: 1rem;
       text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
-      animation: fadeInDown 1s ease;
+      animation: fadeIn 1s;
 
       @media (max-width: 768px) {
         font-size: 3rem;
@@ -45,7 +44,7 @@
       font-size: 1.5rem;
       margin-bottom: 2rem;
       opacity: 0.95;
-      animation: fadeInUp 1s ease 0.2s backwards;
+      animation: fadeInUp 1s 0.2s backwards;
     }
 
     .btn-hero {
@@ -58,8 +57,8 @@
       font-weight: 700;
       font-size: 1.1rem;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-      transition: all 0.3s ease;
-      animation: fadeInUp 1s ease 0.4s backwards;
+      transition: all 0.3s;
+      animation: fadeInUp 1s 0.4s backwards;
 
       &:hover {
         transform: translateY(-5px);
@@ -69,29 +68,6 @@
   }
 }
 
-@keyframes fadeInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-// Gallery Section
 .gallery-section {
   padding: 6rem 2rem;
   background: white;
@@ -106,14 +82,13 @@
     text-align: center;
     margin-bottom: 3rem;
     color: #333;
-    position: relative;
 
     &::after {
       content: '';
       display: block;
       width: 80px;
       height: 4px;
-      background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+      @include gradient-bg;
       margin: 1rem auto 0;
       border-radius: 2px;
     }
@@ -126,18 +101,11 @@
   padding: 4rem 0;
 
   .spinner {
+    @include spinner;
     width: 50px;
     height: 50px;
-    border: 4px solid rgba(16, 185, 129, 0.2);
-    border-top-color: #10b981;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
     margin: 0 auto 1rem;
   }
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
 }
 
 .error-message {
@@ -158,7 +126,6 @@
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    font-weight: 600;
     transition: transform 0.2s;
 
     &:hover {
@@ -179,7 +146,7 @@
   overflow: hidden;
   background: white;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: all 0.3s;
 
   &:hover {
     transform: translateY(-10px);
@@ -193,12 +160,11 @@
 
     img {
       position: absolute;
-      top: 0;
-      left: 0;
+      inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.3s ease;
+      transition: transform 0.3s;
     }
 
     &:hover img {
@@ -213,13 +179,10 @@
       background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
       color: white;
       padding: 1.5rem 1rem 1rem;
-      transform: translateY(0);
-      transition: transform 0.3s ease;
 
       h3 {
         margin: 0;
         font-size: 1.2rem;
-        font-weight: 600;
       }
 
       .year {
@@ -241,44 +204,24 @@
 
 .modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   background: rgba(0, 0, 0, 0.9);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
   padding: 2rem;
-  animation: fadeIn 0.3s ease;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  animation: fadeIn 0.3s;
 }
 
 .modal-content {
-  background: white;
-  border-radius: 12px;
+  @include card-style;
   max-width: 1200px;
   width: 100%;
   max-height: 90vh;
   overflow-y: auto;
   position: relative;
-  animation: slideUp 0.3s ease;
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  animation: slideUp 0.3s;
 }
 
 .close-btn {
@@ -312,13 +255,11 @@
   }
 }
 
-.modal-image {
-  img {
-    width: 100%;
-    height: auto;
-    border-radius: 8px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-  }
+.modal-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
 }
 
 .modal-details {
