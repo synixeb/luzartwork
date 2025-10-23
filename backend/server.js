@@ -6,6 +6,9 @@ require('dotenv').config();
 
 const app = express();
 
+// Import middleware
+const { notFound, errorHandler } = require('./middleware/errorHandler');
+
 // Middleware
 app.use(cors({
   origin: process.env.FRONTEND_URL || 'http://localhost:4200',
@@ -18,12 +21,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Database connection
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
+mongoose.connect(process.env.MONGODB_URI)
 .then(() => console.log('✅ MongoDB connecté'))
-.catch(err => console.error('❌ Erreur de connexion MongoDB:', err));
+.catch(err => {
+  console.error('❌ Erreur de connexion MongoDB:', err);
+  process.exit(1);
+});
 
 // Routes
 app.use('/api/auth', require('./routes/auth'));
@@ -33,17 +36,23 @@ app.use('/api/contact-info', require('./routes/contactInfo'));
 
 // Health check
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', message: 'API fonctionne correctement' });
+  res.json({ 
+    status: 'OK', 
+    message: 'API fonctionne correctement',
+    timestamp: new Date().toISOString()
+  });
 });
 
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ message: 'Une erreur est survenue!', error: err.message });
-});
+// Handle 404 routes
+app.use(notFound);
+
+// Global error handler
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
   console.log(`🚀 Serveur démarré sur le port ${PORT}`);
+  console.log(`📍 Environnement: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`🌐 API: http://localhost:${PORT}/api`);
 });

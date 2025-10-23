@@ -18,6 +18,10 @@ This is a **one-page artist portfolio** with JWT-authenticated admin dashboard. 
 - **Smooth scroll navigation** - Fixed navbar with anchor links to page sections
 
 ### Backend (Express + MongoDB Atlas)
+- **MVC Architecture** with controllers, routes, and models separation
+- **Centralized error handling** with custom AppError class
+- **Centralized validation** with express-validator middleware
+- **Centralized multer configuration** for file uploads
 - JWT authentication with 24h token expiration
 - Multer for file uploads (5MB limit, images only)
 - Mongoose models with validation
@@ -41,9 +45,18 @@ frontend/src/app/
   └── interceptors/          # Functional interceptors (authInterceptor)
 
 backend/
-  ├── models/                # Mongoose schemas (User, Artwork)
-  ├── routes/                # Express routers with validation
-  ├── middleware/            # auth.js (JWT verification)
+  ├── config/                # Centralized configurations (multer)
+  ├── controllers/           # Business logic (MVC pattern)
+  │   ├── artworkController.js
+  │   ├── authController.js
+  │   ├── artistInfoController.js
+  │   └── contactInfoController.js
+  ├── middleware/            # Auth, validation, error handling
+  │   ├── auth.js
+  │   ├── errorHandler.js
+  │   └── validation.js
+  ├── models/                # Mongoose schemas (User, Artwork, ArtistInfo, ContactInfo)
+  ├── routes/                # Express routers (minimal, compose middleware)
   └── uploads/               # User-uploaded images (git-ignored)
 ```
 
