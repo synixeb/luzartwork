@@ -136,38 +136,104 @@ Suivez les instructions pour créer votre compte administrateur.
 3. Connectez-vous avec vos identifiants admin
 4. Ajoutez, modifiez ou supprimez des œuvres via le tableau de bord (`/admin`)
 
-## 📤 Déploiement sur Hostinger
+## 📤 Déploiement sur Hostinger (synix.fr)
 
-### 1. Configuration des Secrets GitHub
+### 🚀 Déploiement Rapide
 
-Dans votre repository GitHub, allez dans `Settings` > `Secrets and variables` > `Actions` et ajoutez:
+Le site est configuré pour un déploiement automatique sur **https://synix.fr** via GitHub Actions.
 
-- `FTP_SERVER`: L'adresse FTP de votre hébergement Hostinger
-- `FTP_USERNAME`: Votre nom d'utilisateur FTP
-- `FTP_PASSWORD`: Votre mot de passe FTP
+**Guides disponibles** :
+- 📘 **[Guide Déploiement Rapide](QUICKSTART_DEPLOYMENT.md)** - Déploiement en 5 minutes
+- 📗 **[Guide Complet Hostinger](HOSTINGER_DEPLOYMENT.md)** - Documentation détaillée
+- 📋 **[Checklist Déploiement](DEPLOYMENT_CHECKLIST.md)** - Liste de vérification complète
+- 🔐 **[Configuration Secrets](.github/SECRETS.md)** - Guide des secrets GitHub
 
-### 2. Configuration Hostinger
+### 1️⃣ Configuration des Secrets GitHub (une seule fois)
 
-1. **Base de données MongoDB**: 
-   - **MongoDB Atlas est déjà utilisé** - configuration terminée lors du développement
-   - Assurez-vous que l'URL de connexion dans `.env` pointe vers votre cluster Atlas de production
+Dans votre repository GitHub : `Settings` → `Secrets and variables` → `Actions`
 
-2. **Variables d'environnement backend**:
-   - Le fichier `.env` sur le serveur doit contenir:
-     - `MONGODB_URI` : URL MongoDB Atlas (même qu'en développement ou cluster séparé)
-     - `JWT_SECRET` : **Changez pour une valeur sécurisée unique**
-     - `FRONTEND_URL` : URL de votre domaine de production
+Ajouter ces 5 secrets :
 
-3. **Déploiement**:
-   - Push sur la branche `main`
-   - GitHub Actions construira et déploiera automatiquement
+| Secret | Description | Où l'obtenir |
+|--------|-------------|--------------|
+| `FTP_SERVER` | Serveur FTP Hostinger | hPanel → Files → FTP Accounts |
+| `FTP_USERNAME` | Utilisateur FTP | hPanel → Files → FTP Accounts |
+| `FTP_PASSWORD` | Mot de passe FTP | hPanel → Files → FTP Accounts |
+| `MONGODB_URI` | URI MongoDB Atlas | Déjà configuré (voir `.env`) |
+| `JWT_SECRET` | Secret JWT production | Générer avec `openssl rand -base64 64` |
 
-### 3. Structure de déploiement
+**⚠️ Important** : Voir le [guide des secrets](.github/SECRETS.md) pour les détails complets.
+
+### 2️⃣ Configuration Hostinger (une seule fois)
+
+1. **Activer SSL/HTTPS** :
+   - hPanel → Advanced → SSL → Activer pour synix.fr
+
+2. **Configurer Node.js Application** :
+   - hPanel → Advanced → Node.js → Create Application
+   - Node version : `20.x`
+   - Application root : `/api`
+   - Application URL : `https://synix.fr/api`
+   - Startup file : `server.js`
+
+3. **Whitelist MongoDB Atlas** :
+   - MongoDB Atlas → Network Access → Add IP `0.0.0.0/0`
+
+### 3️⃣ Déployer
+
+```bash
+# Vérifier que tout est prêt (optionnel)
+./check-deploy.bat    # Windows
+./check-deploy.sh     # Linux/Mac
+
+# Déployer en production
+git checkout main
+git merge develop
+git push origin main
+```
+
+**GitHub Actions** déploie automatiquement sur https://synix.fr ! 🚀
+
+### 4️⃣ Créer un Admin (première fois)
+
+Via SSH Hostinger :
+```bash
+ssh votre_user@synix.fr
+cd ~/api
+node create-admin.js
+```
+
+### 5️⃣ Vérifier le Déploiement
+
+- ✅ Frontend : https://synix.fr
+- ✅ API Health : https://synix.fr/api/health
+- ✅ Login Admin : https://synix.fr/login
+- ✅ Dashboard : https://synix.fr/admin
+
+### Structure de Déploiement Hostinger
 
 ```
-/public_html/          (Frontend Angular buildé)
-/api/                  (Backend Node.js)
+/home/uXXXXXXXX/
+├── public_html/          # Frontend Angular (build production)
+│   ├── index.html
+│   ├── *.js, *.css
+│   └── .htaccess        # Configuration Apache (routing + proxy)
+└── api/                 # Backend Node.js
+    ├── server.js
+    ├── .env            # Créé par GitHub Actions
+    └── uploads/        # Images uploadées
 ```
+
+### 🐛 Dépannage
+
+Voir les guides détaillés :
+- [HOSTINGER_DEPLOYMENT.md](HOSTINGER_DEPLOYMENT.md) - Dépannage complet
+- [DEPLOYMENT_CHECKLIST.md](DEPLOYMENT_CHECKLIST.md) - Résolution de problèmes
+
+**Problèmes courants** :
+- **502 Bad Gateway** : Redémarrer Node.js dans hPanel
+- **404 Frontend** : Vérifier `.htaccess` déployé
+- **MongoDB Error** : Vérifier IP whitelistée sur Atlas
 
 ## 📁 Structure du Projet
 

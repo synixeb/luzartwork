@@ -3,27 +3,18 @@ const mongoose = require('mongoose');
 const contactInfoSchema = new mongoose.Schema({
   email: {
     type: String,
-    required: true,
     default: 'contact@artiste.com'
-  },
-  phone: {
-    type: String,
-    default: '+33 6 12 34 56 78'
   },
   address: {
     type: String,
-    default: 'Paris, France'
+    default: 'Auvergne - Rhône-Alpes, France'
   },
   social: {
     instagram: {
       type: String,
-      default: '@artiste'
+      default: 'luzartwork'
     },
-    facebook: {
-      type: String,
-      default: 'artiste.art'
-    },
-    twitter: {
+    artstation: {
       type: String,
       default: ''
     },
