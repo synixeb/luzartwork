@@ -1,6 +1,18 @@
+# Override parent restrictions - Allow access to all files
+<FilesMatch ".*">
+    Require all granted
+</FilesMatch>
+
+# Disable directory listing
+Options -Indexes
+
+# Set default index file
+DirectoryIndex index.html
+
 # Enable mod_rewrite
 <IfModule mod_rewrite.c>
     RewriteEngine On
+    RewriteBase /
     
     # Redirect to HTTPS
     RewriteCond %{HTTPS} off
@@ -11,7 +23,6 @@
     RewriteRule ^api/(.*)$ http://localhost:3000/api/$1 [P,L]
     
     # Angular routing - serve index.html for all non-file requests
-    RewriteBase /
     RewriteRule ^index\.html$ - [L]
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
